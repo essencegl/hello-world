@@ -38,7 +38,7 @@ result = []
 times = x_Pred.shape[0]
 for i in range(times):
 	print i
-	result.append([i,knn(x_Pred[i], x_train, y_train, 2)]) # k = 3
+	result.append([i,knn(x_Pred[i], x_train, y_train, 2)]) # k = 2
 
 csvfile = file('test.csv', 'wb')
 writer = csv.writer(csvfile)
