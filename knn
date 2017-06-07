@@ -1,2 +1,47 @@
+from numpy import *
 import pandas as pd
+import csv
+import operator
+#encoding:utf-8
+#my knn
+def knn(inX, trainSet, reference, k):
+	dataSetSize = trainSet.shape[0] #shape get the length of the 1st dimension
+	diffMat = tile(inX, (dataSetSize,1)) - trainSet
+	#tile(A,(a,b)): Array A repeats a times in the 1st dimension
+	#				and b times in the 2st dimension
+	sqDiffMat = diffMat**2 # square
+	sqdistances = sqDiffMat.sum(axis = 1)
+	distances = sqdistances**0.5
+	sortedDistIndicies = distances.argsort() # return the index
+	
+	#print sortedDistIndicies
+	
+	'''sum = 0.0
+	for i in range(k):
+		sum += reference[sortedDistIndicies[i]]
+	sum /= k'''
+	sum = 0.0
 
+	sum+= 0.55 * reference[sortedDistIndicies[0]] + 0.45 * reference[sortedDistIndicies[1]] 
+
+	return sum[0]
+
+#main function
+df = pd.read_csv("save_train.csv")
+x_train = df[list(range(1,385))].values
+y_train = df[list(range(385, 386))].values
+
+df = pd.read_csv("save_test.csv")
+x_Pred = df[list(range(1, 385))].values
+
+result = []
+times = x_Pred.shape[0]
+for i in range(times):
+	print i
+	result.append([i,knn(x_Pred[i], x_train, y_train, 2)]) # k = 3
+
+csvfile = file('test.csv', 'wb')
+writer = csv.writer(csvfile)
+writer.writerows(['name'])
+writer.writerows(result)
+csvfile.close()
